@@ -1,0 +1,36 @@
+{
+  "name": "wdio-ms-teams-reporter",
+  "version": "1.0.0",
+  "description": "A WebdriverIO plugin to report to Microsoft Teams channel webhooks",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "@wdio/reporter": "^7.6.0",
+    "@wdio/types": "^7.6.0",
+    "webdriverio": "^7.6.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node12": "^1.0.7"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marcelblijleven/wdio-ms-teams-reporter.git"
+  },
+  "keywords": [
+    "webdriverio",
+    "wdio",
+    "wdio-reporter",
+    "ms-teams"
+  ],
+  "author": "Marcel Blijleven <marcelblijleven@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/marcelblijleven/wdio-ms-teams-reporter/issues"
+  },
+  "homepage": "https://github.com/marcelblijleven/wdio-ms-teams-reporter#readme"
+}
