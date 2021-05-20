@@ -1,6 +1,6 @@
 {
     "name": "wdio-ms-teams-service",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "description": "A WebdriverIO plugin to report to Microsoft Teams channel webhooks",
     "main": "index.js",
     "directories": {

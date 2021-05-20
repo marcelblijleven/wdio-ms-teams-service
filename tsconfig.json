@@ -1,26 +1,18 @@
 {
-  "extends": "@tsconfig/node12/tsconfig.json",
-  "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": ".",
-    "outDir": "./build",
-    "rootDir": "./src",
-    "declaration": true,
-    "declarationMap": true,
-    "resolveJsonModule": true,
-    "removeComments": false,
-    "strictFunctionTypes": false,
-    "lib": ["dom","es2019"],
-    "types": [
-      "node",
-      "jest"
-    ]
-  },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "coverage"
-  ]
+    "extends": "@tsconfig/node12/tsconfig.json",
+    "compilerOptions": {
+        "allowJs": true,
+        "baseUrl": ".",
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "declaration": true,
+        "declarationMap": true,
+        "resolveJsonModule": true,
+        "removeComments": false,
+        "strictFunctionTypes": false,
+        "lib": ["dom", "es2019"],
+        "types": ["node", "jest"]
+    },
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "coverage"]
 }
