@@ -10,3 +10,5 @@ prettierrc.json
 .eslintignore
 
 commitlint.config.js
+
+.github
