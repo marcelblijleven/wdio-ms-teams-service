@@ -37,10 +37,11 @@ jobs:
             - run: npm install
               if: steps.cache-node-modules.outputs.cache-hit != 'true'
 
-            - name: Run test and build
-              run: |
-                  npm run test --passWithNoTests
-                  npm run build
+            #            - name: Run tests
+            #              run: npm run test
+
+            - name: Run build
+              run: npm run build
 
             - name: Create release files
               run: npm run release
