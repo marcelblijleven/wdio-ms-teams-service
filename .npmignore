@@ -1,5 +1,14 @@
 src
 tests
 tsconfig.json
+babel.config.js
+
+.husky
+prettierrc.json
+.prettierignore
+.eslintrc.js
+.eslintignore
+
+commitlint.config.js
 
 .github
