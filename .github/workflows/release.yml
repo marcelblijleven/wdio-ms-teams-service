@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [ master ]
+env:
+  NODE_VERSION: '14.x'
+
+jobs:
+  build-and-release:
+    if: "!contains(github.event.head_commit.message, 'chore(release)')"
+    name: Build and release
+    runs-on: ubuntu-latest
+    environment: npm
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      
+      - uses: actions/setup-node@v2
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      
+      - name: Setup git bot
+        run: |
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config user.name $GITHUB_ACTOR
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}    
+      
+      - run: npm install
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+      
+      - name: Run test and build
+        run: |
+          npm run test
+          npm run build
+      
+      - name: Create release files
+        run: npm run release
+        
+      - name: Store current tag in GITHUB_ENV
+        run: echo "CURRENT_TAG=$(git describe --tags)" >> $GITHUB_ENV
+        
+      # Update master with bumped files and publish to npm
+      - name: Update master with bumped files
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+        run: git push --follow-tags origin master && npm publish
+
+      # Create Github release
+      - name: Create Github release
+        id: create_release
+        uses: actions/create-release@latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ env.CURRENT_TAG }}
+          release_name: Release ${{ env.CURRENT_TAG }}
+          body: |
+            This is an automated release.
+            For changes in this version, see [the changelog](https://github.com/marcelblijleven/wdio-ms-teams-service/blob/master/CHANGELOG.md)
+            Merge commit that triggered this release: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
