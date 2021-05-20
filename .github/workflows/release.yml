@@ -5,6 +5,7 @@ on:
     branches: [ master ]
 env:
   NODE_VERSION: '14.x'
+  NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
 jobs:
   build-and-release:
@@ -35,8 +36,6 @@ jobs:
 
       - run: npm install
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
 
       - name: Run test and build
         run: |
@@ -51,8 +50,6 @@ jobs:
 
       # Update master with bumped files and publish to npm
       - name: Update master with bumped files
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
         run: git push --follow-tags origin master && npm publish
 
       # Create Github release
