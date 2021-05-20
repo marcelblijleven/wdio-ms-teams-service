@@ -39,7 +39,7 @@ jobs:
 
             - name: Run test and build
               run: |
-                  npm run test
+                  npm run test --passWithNoTests
                   npm run build
 
             - name: Create release files
