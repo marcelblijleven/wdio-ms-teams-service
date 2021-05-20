@@ -16,11 +16,11 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-      
+
       - uses: actions/setup-node@v2
         with:
           node-version: ${{ env.NODE_VERSION }}
-      
+
       - name: Setup git bot
         run: |
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
@@ -31,22 +31,24 @@ jobs:
         uses: actions/cache@v2
         with:
           path: node_modules
-          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}    
-      
+          key: ${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
       - run: npm install
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
-      
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_ACCESS_TOKEN }}
+
       - name: Run test and build
         run: |
           npm run test
           npm run build
-      
+
       - name: Create release files
         run: npm run release
-        
+
       - name: Store current tag in GITHUB_ENV
         run: echo "CURRENT_TAG=$(git describe --tags)" >> $GITHUB_ENV
-        
+
       # Update master with bumped files and publish to npm
       - name: Update master with bumped files
         env:
