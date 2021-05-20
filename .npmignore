@@ -8,3 +8,5 @@ prettierrc.json
 .prettierignore
 .eslintrc.js
 .eslintignore
+
+commitlint.config.js
