@@ -36,7 +36,7 @@
         "build/**/*"
     ],
     "scripts": {
-        "test": "jest",
+        "test": "jest --passWithNoTests",
         "lint": "eslint '*/**/*.{js,ts,tsx}' --quiet --fix",
         "build": "tsc",
         "prepublishOnly": "npm test && npm run lint",
