@@ -1,3 +1,3 @@
 import MsTeamsService from "./ms-teams-service";
 
-export { MsTeamsService };
+export default MsTeamsService;
