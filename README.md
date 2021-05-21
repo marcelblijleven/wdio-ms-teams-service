@@ -18,9 +18,19 @@ Next, configure your config file
 // wdio.conf.js
 export.config = {
     // ...
-    services: ["ms-teams", {
-        webhookURL: "https://your-webhook.url/c0ffee"
-    }]
+    services: [["ms-teams", {
+        webhookURL: "https://your-webhook.url.com/c0ffee"
+    }]]
     // ...
 };
 ```
+
+## Options
+
+**webhook URL**
+
+The URL of the Microsoft Teams webhook
+
+Example: `https://your-webhook.url.com/c0ffee`
+
+Type: `string`
