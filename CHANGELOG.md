@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.5](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.4...v0.1.5) (2021-05-21)
+
+
+### Bug Fixes
+
+* incorrect github and npm urls ([0e7c07f](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/0e7c07f17cbe8016f1654add369fe013b492568d))
+
 ### [0.1.4](https://github.com/marcelblijleven/wdio-ms-teams-reporter/compare/v0.1.3...v0.1.4) (2021-05-21)
 
 
