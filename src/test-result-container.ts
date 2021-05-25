@@ -12,10 +12,16 @@ export interface ITestResult {
 export default class TestResultContainer {
     testNames: Array<string>;
     testResults: ITestResults;
+    passedTests: number;
+    failedTests: number;
+    totalTests: number;
 
     constructor() {
         this.testNames = [];
         this.testResults = {};
+        this.passedTests = 0;
+        this.failedTests = 0;
+        this.totalTests = 0;
     }
 
     addTest(testName: string, result: ITestResult): void {
@@ -29,5 +35,8 @@ export default class TestResultContainer {
         }
 
         this.testResults[testName].push(result);
+
+        result.passed ? (this.passedTests += 1) : (this.failedTests += 1);
+        this.totalTests += 1;
     }
 }

@@ -57,5 +57,23 @@ describe("TestResultContainer", function () {
             expect(container.testResults[testName2]).toHaveLength(1);
             expect(container.testResults[testName2][0]).toEqual(testResult);
         });
+
+        test("Should update the test totals when a test is added", function () {
+            const container = new TestResultContainer();
+            const testName = "sample test one";
+            const testName2 = "sample test two";
+            const testResultFailed = { ...testResult, passed: false };
+
+            expect(container.failedTests).toEqual(0);
+            expect(container.passedTests).toEqual(0);
+            expect(container.totalTests).toEqual(0);
+
+            container.addTest(testName, testResult);
+            container.addTest(testName2, testResultFailed);
+
+            expect(container.failedTests).toEqual(1);
+            expect(container.passedTests).toEqual(1);
+            expect(container.totalTests).toEqual(2);
+        });
     });
 });

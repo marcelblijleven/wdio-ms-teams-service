@@ -1,5 +1,5 @@
 import { AdaptiveCard } from "../src/adaptive-card";
-import { ITestResult } from "../src/types";
+import TestResultContainer, { ITestResult } from "../src/test-result-container";
 
 const testResults: Array<ITestResult> = [
     {
@@ -41,19 +41,52 @@ const expected = {
                     },
                     { type: "TextBlock", text: "This is a test", wrap: true, weight: "default" },
                     {
-                        type: "FactSet",
-                        facts: [
+                        type: "TextBlock",
+                        text: "mock test",
+                        wrap: false,
+                        weight: "bolder",
+                    },
+                    {
+                        type: "RichTextBlock",
+                        inlines: [
                             {
-                                title: "Should add this to the test",
-                                value: "passed",
+                                type: "TextRun",
+                                text: "✓ ",
+                                color: "good",
+                                weight: "bolder",
+                                fontType: "monospace",
                             },
-                            {
-                                title: "Should also add this to the test",
-                                value: "failed",
-                            },
-                            { title: "Should also add this to the test as an extra result", value: "failed" },
+                            "Should add this to the test",
                         ],
-                        spacing: "extraLarge",
+                        horizontalAlignment: "left",
+                    },
+                    {
+                        type: "RichTextBlock",
+                        inlines: [
+                            {
+                                type: "TextRun",
+                                text: "✖ ",
+                                color: "warning",
+                                weight: "bolder",
+                                fontType: "monospace",
+                            },
+                            "Should also add this to the test",
+                        ],
+                        horizontalAlignment: "left",
+                    },
+                    {
+                        type: "RichTextBlock",
+                        inlines: [
+                            {
+                                type: "TextRun",
+                                text: "✖ ",
+                                color: "warning",
+                                weight: "bolder",
+                                fontType: "monospace",
+                            },
+                            "Should also add this to the test as an extra result",
+                        ],
+                        horizontalAlignment: "left",
                     },
                     {
                         type: "FactSet",
@@ -68,13 +101,20 @@ const expected = {
                         spacing: "extraLarge",
                     },
                 ],
+                msteams: { width: "full" },
             },
         },
     ],
 };
 
 describe("Adaptive Card", function () {
-    const adaptiveCard = new AdaptiveCard("This is a test", testResults);
+    const resultContainer = new TestResultContainer();
+
+    for (const result of testResults) {
+        resultContainer.addTest("mock test", result);
+    }
+
+    const adaptiveCard = new AdaptiveCard("This is a test", resultContainer);
 
     test("Should generate the correct content", function () {
         expect(expected).toEqual(adaptiveCard.content());
