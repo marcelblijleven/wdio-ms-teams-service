@@ -152,6 +152,22 @@ describe("MsTeamsService", function () {
             expect(service.testResultContainer.testNames).toHaveLength(1);
             expect(service.testResultContainer.testResults[testName]).toHaveLength(2);
         });
+
+        test("Should use message from service options if provided", function () {
+            const mockSend = jest.fn();
+            const messageOptions = { ...serviceOptions, message: "A new message was provided" };
+            const service = new MsTeamsService(messageOptions, capabilities, options);
+            const result: ITestResult = {
+                error: "",
+                passed: true,
+                title: "Test title",
+            };
+            service.testResultContainer.addTest("Mock test", result);
+            (service as any)._webhook.send = mockSend;
+            service.after();
+            expect(mockSend.mock.calls[0][0].includes("A new message was provided")).toBeTruthy();
+            expect(mockSend).toHaveBeenCalled();
+        });
     });
 });
 
