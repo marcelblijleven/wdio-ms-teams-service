@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.6](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.5...v0.1.6) (2021-05-25)
+
+
+### Features
+
+* add full width option to adaptive card ([4397707](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/43977078a2c6e5245d62f44166b0de74447c927b))
+* add test result container ([18a6939](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/18a6939e917f8fac7e3a3b35652fc09b6e9176cf))
+* use rich text blocks for test results ([73b2bdc](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/73b2bdc13b5dbcfc78c75fe540025470a63cbb15))
+
 ### [0.1.5](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.4...v0.1.5) (2021-05-21)
 
 
