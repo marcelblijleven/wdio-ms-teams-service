@@ -1,8 +1,9 @@
 import MsTeamsService from "../src";
 import { Test, TestResult } from "@wdio/types/build/Frameworks";
-import { ITestResult } from "../src/test-result-container";
+import TestResultContainer, { ITestResult } from "../src/test-result-container";
 import { AdaptiveCard } from "../src/adaptive-card";
 import IncomingWebhook from "../src/incoming-webhook";
+import { filterPassedTests } from "../src/ms-teams-service";
 
 describe("MsTeamsService", function () {
     const serviceOptions = {
@@ -112,5 +113,85 @@ describe("MsTeamsService", function () {
             const adaptiveCard = new AdaptiveCard("An automated test run just completed", service.testResultContainer);
             expect((service as any)._webhook.send).toHaveBeenCalledWith(adaptiveCard.toString());
         });
+
+        test("Should not call webhook if failedTestsOnly is set and all tests have passed", function () {
+            const mockSend = jest.fn();
+            const failingTestsOptions = { ...serviceOptions, failingTestsOnly: true };
+            const service = new MsTeamsService(failingTestsOptions, capabilities, options);
+            const result: ITestResult = {
+                error: "",
+                passed: true,
+                title: "Test title",
+            };
+            service.testResultContainer.addTest("Mock test", result);
+            (service as any)._webhook.send = mockSend;
+            service.after();
+            expect(mockSend).not.toHaveBeenCalled();
+        });
+
+        test("Should call webhook if failedTestsOnly is set and not all tests have passed", function () {
+            const mockSend = jest.fn();
+            const testName = "Mock test";
+            const failingTestsOptions = { ...serviceOptions, failingTestsOnly: true };
+            const service = new MsTeamsService(failingTestsOptions, capabilities, options);
+            const passedResult: ITestResult = {
+                error: "",
+                passed: true,
+                title: "Test title",
+            };
+            const failedResult: ITestResult = {
+                error: "",
+                passed: false,
+                title: "Test title",
+            };
+            service.testResultContainer.addTest(testName, passedResult);
+            service.testResultContainer.addTest(testName, failedResult);
+            (service as any)._webhook.send = mockSend;
+            service.after();
+            expect(mockSend).toHaveBeenCalled();
+            expect(service.testResultContainer.testNames).toHaveLength(1);
+            expect(service.testResultContainer.testResults[testName]).toHaveLength(2);
+        });
+    });
+});
+
+describe("filterPassedTests", function () {
+    test("Should filter out all passed tests", function () {
+        const container = new TestResultContainer();
+        container.testNames.push("has failed");
+        container.testResults["has failed"] = [
+            {
+                description: "A test description for a failed test",
+                error: "",
+                passed: false,
+                title: "Failed test title",
+            },
+            {
+                description: "A test description for a passed test",
+                error: "",
+                passed: true,
+                title: "Passed test title",
+            },
+        ];
+        container.testNames.push("has only passed");
+        container.testResults["has only passed"] = [
+            {
+                description: "A test description for a passed test",
+                error: "",
+                passed: true,
+                title: "Passed test title",
+            },
+            {
+                description: "A test description for a passed test",
+                error: "",
+                passed: true,
+                title: "Passed test title",
+            },
+        ];
+
+        filterPassedTests(container);
+        expect(container.testNames).toHaveLength(1);
+        expect(container.testNames.includes("has only passed")).toBeFalsy();
+        expect(container.testNames.includes("has failed")).toBeTruthy();
     });
 });

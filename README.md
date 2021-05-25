@@ -19,7 +19,8 @@ Next, configure your config file
 export.config = {
     // ...
     services: [["ms-teams", {
-        webhookURL: "https://your-webhook.url.com/c0ffee"
+        webhookURL: "https://your-webhook.url.com/c0ffee",
+        failingTestsOnly: true,
     }]]
     // ...
 };
@@ -34,6 +35,18 @@ The URL of the Microsoft Teams webhook
 Example: `https://your-webhook.url.com/c0ffee`
 
 Type: `string`
+
+Required: `true`
+
+**failingTestsOnly**
+
+Decide whether to report on failures only. If a test has no failures, it will not be reported.
+
+Type: `boolean`
+
+Default: `false`
+
+Required: `false`
 
 ## Author
 
