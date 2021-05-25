@@ -11,11 +11,16 @@ interface IAdaptiveCardAttachment {
     content: IAdaptiveCardContent;
 }
 
+interface IAdaptiveCardMsTeamsProperty {
+    width: "full";
+}
+
 interface IAdaptiveCardContent {
     $schema: "http://adaptivecards.io/schemas/adaptive-card.json";
     type: "AdaptiveCard";
     version: "1.2";
     body: Array<IAdaptiveCardContainer | IAdaptiveCardTextBlock | IAdaptiveCardFactSet>;
+    msteams?: IAdaptiveCardMsTeamsProperty;
 }
 
 interface IAdaptiveCardContainer {
@@ -57,6 +62,9 @@ export class AdaptiveCard {
                             AdaptiveCard._generateFactSet(AdaptiveCard._generateFacts(results)),
                             AdaptiveCard._generateFactSet(AdaptiveCard._generateFactsOverview(results)),
                         ],
+                        msteams: {
+                            width: "full",
+                        },
                     },
                 },
             ],
