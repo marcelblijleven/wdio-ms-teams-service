@@ -1,11 +1,11 @@
-import { ITestResult } from "./types";
+import TestResultContainer, { ITestResult } from "./test-result-container";
 
 interface IAdaptiveCard {
     type: "message";
-    attachments: Array<IAdaptiveCardAttachment>;
+    attachments: Array<ICardAttachment>;
 }
 
-interface IAdaptiveCardAttachment {
+interface ICardAttachment {
     contentType: "application/vnd.microsoft.card.adaptive";
     contentUrl: string | null;
     content: IAdaptiveCardContent;
@@ -15,32 +15,68 @@ interface IAdaptiveCardContent {
     $schema: "http://adaptivecards.io/schemas/adaptive-card.json";
     type: "AdaptiveCard";
     version: "1.2";
-    body: Array<IAdaptiveCardContainer | IAdaptiveCardTextBlock | IAdaptiveCardFactSet>;
+    body: Array<ICardContainer | ITextBlock | IFactSet | IRichTextBlock>;
+    msteams?: { width: "full" };
 }
 
-interface IAdaptiveCardContainer {
+interface ICardContainer {
     type: "Container";
     padding: string;
-    items: Array<IAdaptiveCardTextBlock | IAdaptiveCardFactSet>;
+    items: Array<ITextBlock | IFactSet>;
 }
 
-interface IAdaptiveCardTextBlock {
+interface ITextBlock {
     type: "TextBlock";
     text: string;
     wrap?: boolean;
     weight?: "lighter" | "default" | "bolder";
 }
 
-interface IAdaptiveCardFactSet {
+interface IFactSet {
     type: "FactSet";
     facts: Array<{ title: string; value: string }>;
     spacing: "none" | "small" | "default" | "medium" | "large" | "extraLarge";
 }
 
+interface IRichTextBlock {
+    type: "RichTextBlock";
+    inlines: Array<string | ITextRun>;
+    horizontalAlignment?: "left" | "center" | "right";
+}
+
+interface ITextRun {
+    type: "TextRun";
+    text: string;
+    color?: "default" | "dark" | "light" | "accent" | "good" | "warning" | "attention";
+    fontType?: "default" | "monospace";
+    highlight?: boolean;
+    isSubtle?: true;
+    italic?: boolean;
+    size?: "default" | "small" | "medium" | "large" | "extraLarge";
+    strikethrough?: boolean;
+    underline?: boolean;
+    weight: "default" | "lighter" | "bolder";
+}
+
 export class AdaptiveCard {
     private readonly _card: IAdaptiveCard;
 
-    constructor(message: string, results: Array<ITestResult>) {
+    constructor(message: string, resultContainer: TestResultContainer) {
+        const body: IAdaptiveCardContent["body"] = [];
+        body.push(AdaptiveCard._generateTextBlock("Automated test results | WebdriverIO", true, "bolder"));
+        body.push(AdaptiveCard._generateTextBlock(message, true, "default"));
+
+        for (const test of resultContainer.testNames) {
+            const results = resultContainer.testResults[test];
+            body.push(AdaptiveCard._generateTextBlock(test, false, "bolder"));
+
+            for (const result of results) {
+                body.push(createTestResultRichTextBox(result));
+            }
+        }
+
+        body.push(AdaptiveCard._generateFactSet(AdaptiveCard._generateFactsOverview(resultContainer)));
+
         this._card = {
             type: "message",
             attachments: [
@@ -51,48 +87,38 @@ export class AdaptiveCard {
                         $schema: "http://adaptivecards.io/schemas/adaptive-card.json",
                         type: "AdaptiveCard",
                         version: "1.2",
-                        body: [
-                            AdaptiveCard._generateTextBlock("Automated test results | WebdriverIO", true, "bolder"),
-                            AdaptiveCard._generateTextBlock(message, true, "default"),
-                            AdaptiveCard._generateFactSet(AdaptiveCard._generateFacts(results)),
-                            AdaptiveCard._generateFactSet(AdaptiveCard._generateFactsOverview(results)),
-                        ],
+                        body: body,
+                        msteams: {
+                            width: "full",
+                        },
                     },
                 },
             ],
         };
     }
 
-    content() {
+    content(): IAdaptiveCard {
         return this._card;
     }
 
-    toString() {
+    toString(): string {
         return JSON.stringify(this.content());
     }
 
-    private static _generateFactsOverview(results: Array<ITestResult>): Array<{ title: string; value: string }> {
-        const total = { title: "Total tests", value: results.length.toString(10) };
-        const passed = { title: "Passed", value: results.filter((result) => result.passed).length.toString(10) };
-        const failed = { title: "Failed", value: results.filter((result) => !result.passed).length.toString(10) };
+    private static _generateFactsOverview(
+        resultContainer: TestResultContainer,
+    ): Array<{ title: string; value: string }> {
+        const total = { title: "Total tests", value: resultContainer.totalTests.toString(10) };
+        const passed = { title: "Passed", value: resultContainer.passedTests.toString(10) };
+        const failed = { title: "Failed", value: resultContainer.failedTests.toString(10) };
         return [total, passed, failed];
-    }
-
-    private static _generateFacts(results: Array<ITestResult>): Array<{ title: string; value: string }> {
-        const facts: Array<{ title: string; value: string }> = [];
-        for (const result of results) {
-            const value = result.passed ? "passed" : "failed";
-            facts.push({ title: result.title, value: value });
-        }
-
-        return facts;
     }
 
     private static _generateTextBlock(
         message: string,
         wrap: boolean,
         weight: "lighter" | "default" | "bolder",
-    ): IAdaptiveCardTextBlock {
+    ): ITextBlock {
         return {
             type: "TextBlock",
             text: message,
@@ -101,11 +127,30 @@ export class AdaptiveCard {
         };
     }
 
-    private static _generateFactSet(facts: Array<{ title: string; value: string }>): IAdaptiveCardFactSet {
+    private static _generateFactSet(facts: Array<{ title: string; value: string }>): IFactSet {
         return {
             type: "FactSet",
             facts: facts,
             spacing: "extraLarge",
         };
     }
+}
+
+function createTestResultRichTextBox(result: ITestResult): IRichTextBlock {
+    const block: IRichTextBlock = {
+        type: "RichTextBlock",
+        inlines: [],
+        horizontalAlignment: "left",
+    };
+
+    const textRun: ITextRun = {
+        type: "TextRun",
+        text: result.passed ? "✓ " : "✖ ",
+        color: result.passed ? "good" : "warning",
+        weight: "bolder",
+        fontType: "monospace",
+    };
+
+    block.inlines.push(textRun, result.title);
+    return block;
 }

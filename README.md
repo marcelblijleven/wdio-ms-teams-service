@@ -34,3 +34,7 @@ The URL of the Microsoft Teams webhook
 Example: `https://your-webhook.url.com/c0ffee`
 
 Type: `string`
+
+## Author
+
+Marcel Blijleven <marcelblijleven@gmail.com>
