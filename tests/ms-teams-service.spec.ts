@@ -23,7 +23,7 @@ describe("MsTeamsService", function () {
         expect((service as any)._config).toEqual(options);
         // Verify test result container initial values
         expect(service.testResultContainer.testNames).toHaveLength(0);
-        expect(service.testResultContainer.testResults).toHaveLength(0);
+        expect(Object.getOwnPropertyNames(service.testResultContainer.testResults)).toHaveLength(0);
     });
 
     describe("MsTeamsService.before()", function () {
