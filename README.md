@@ -28,7 +28,7 @@ export.config = {
 
 ## Options
 
-**webhook URL**
+### webhookURL
 
 The URL of the Microsoft Teams webhook
 
@@ -38,13 +38,23 @@ Type: `string`
 
 Required: `true`
 
-**failingTestsOnly**
+### failingTestsOnly
 
 Decide whether to report on failures only. If a test has no failures, it will not be reported.
 
 Type: `boolean`
 
 Default: `false`
+
+Required: `false`
+
+### message
+
+Provide a custom message to show at the top of each webhook message, default: _An automated test run just completed_
+
+Type: `string` ([A subset of markdown is supported](https://docs.microsoft.com/en-us/adaptive-cards/authoring-cards/text-features))
+
+Default: `An automated test run just completed`
 
 Required: `false`
 

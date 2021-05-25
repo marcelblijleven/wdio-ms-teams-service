@@ -10,6 +10,7 @@ import TestResultContainer, { ITestResult } from "./test-result-container";
 interface MsTeamsServiceOptions extends Services.ServiceOption {
     webhookURL: string;
     failingTestsOnly?: boolean;
+    message?: string;
 }
 
 export default class MsTeamsService implements Services.ServiceInstance {
@@ -19,6 +20,7 @@ export default class MsTeamsService implements Services.ServiceInstance {
     private _capabilities: Capabilities;
     private _config: TestRunnerOptions;
     private readonly _failingTestsOnly: boolean;
+    private readonly _message?: string;
 
     constructor(serviceOptions: MsTeamsServiceOptions, capabilities: Capabilities, config: TestRunnerOptions) {
         this._webhook = new IncomingWebhook(serviceOptions.webhookURL);
@@ -26,6 +28,7 @@ export default class MsTeamsService implements Services.ServiceInstance {
         this._config = config;
         this.testResultContainer = new TestResultContainer();
         this._failingTestsOnly = !!serviceOptions.failingTestsOnly;
+        this._message = serviceOptions.message;
     }
 
     before(
@@ -49,7 +52,7 @@ export default class MsTeamsService implements Services.ServiceInstance {
     }
 
     async after(): Promise<void> {
-        const message = "An automated test run just completed";
+        const message = this._message ? this._message : "An automated test run just completed";
 
         if (this._failingTestsOnly) {
             if (this.testResultContainer.failedTests === 0) {
