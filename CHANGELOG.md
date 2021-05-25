@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.7](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.6...v0.1.7) (2021-05-25)
+
+
+### Features
+
+* add option to filter out passed tests ([d13f064](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/d13f064c750913a91fcc5b6bc30a4bee0af4ae0c))
+* add option to provide custom message ([0b9ae9f](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/0b9ae9f7e8f700156176411ecbd8fe99730dcae9))
+
 ### [0.1.6](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.5...v0.1.6) (2021-05-25)
 
 
