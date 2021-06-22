@@ -1,11 +1,14 @@
-import type { Services } from "@wdio/types";
+import type { Services, Frameworks } from "@wdio/types";
 import type { Capabilities, RemoteCapability } from "@wdio/types/build/Capabilities";
 import type { Testrunner as TestRunnerOptions } from "@wdio/types/build/Options";
+import type { PickleStep, Feature } from "@cucumber/messages";
+import type { ITestCaseHookParameter } from "@cucumber/cucumber";
 import { Test, TestResult } from "@wdio/types/build/Frameworks";
 import { Browser, MultiRemoteBrowser } from "webdriverio";
 import IncomingWebhook from "./incoming-webhook";
 import { AdaptiveCard } from "./adaptive-card";
 import TestResultContainer, { ITestResult } from "./test-result-container";
+import { Pickle } from "@cucumber/messages";
 
 interface MsTeamsServiceOptions extends Services.ServiceOption {
     webhookURL: string;
@@ -50,6 +53,26 @@ export default class MsTeamsService implements Services.ServiceInstance {
 
         this.testResultContainer.addTest(testName, testResult);
     }
+
+    async afterStep(step: PickleStep, scenario: Pickle, result: Frameworks.PickleResult): Promise<void> {
+        const testName = scenario.name;
+        const testResult: ITestResult = {
+            passed: result.passed,
+            error: result.error || "",
+            title: step.text,
+            description: "",
+        };
+
+        this.testResultContainer.addTest(testName, testResult);
+    }
+
+    // async afterScenario(world: ITestCaseHookParameter, result: Frameworks.PickleResult): Promise<void> {
+    //
+    // }
+    //
+    // async afterFeature(uri: string, feature: Feature): Promise<void> {
+    //
+    // }
 
     async after(): Promise<void> {
         const message = this._message ? this._message : "An automated test run just completed";

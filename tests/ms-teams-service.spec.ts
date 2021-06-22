@@ -4,6 +4,8 @@ import TestResultContainer, { ITestResult } from "../src/test-result-container";
 import { AdaptiveCard } from "../src/adaptive-card";
 import IncomingWebhook from "../src/incoming-webhook";
 import { filterPassedTests } from "../src/ms-teams-service";
+import type { Pickle, PickleStep } from "@cucumber/messages";
+import type { Frameworks } from "@wdio/types";
 
 describe("MsTeamsService", function () {
     const serviceOptions = {
@@ -94,6 +96,47 @@ describe("MsTeamsService", function () {
             expect(testResultContainer.testNames).toHaveLength(1);
             expect(testResultContainer.testNames[0]).toEqual("Mock test full name");
             expect(testResultContainer.testResults["Mock test full name"]).toEqual([expectedResult]);
+        });
+    });
+
+    describe("MsTeamsService.afterStep()", function () {
+        const mockStep: PickleStep = {
+            id: "step-id",
+            text: "Given I am in a test context",
+            astNodeIds: ["abc"],
+        };
+
+        const mockScenario: Pickle = {
+            id: "scenario-id",
+            uri: "xxx",
+            name: "Test scenario",
+            language: "abc",
+            steps: [mockStep],
+            tags: [],
+            astNodeIds: ["abc"],
+        };
+
+        const mockTestResult: Frameworks.PickleResult = {
+            passed: true,
+            error: undefined,
+            duration: 15,
+        };
+
+        test("Should add test results in afterTest hook", async function () {
+            const service = new MsTeamsService(serviceOptions, capabilities, options);
+
+            const expectedResult: ITestResult = {
+                description: "",
+                error: "",
+                passed: true,
+                title: "Given I am in a test context",
+            };
+
+            await service.afterStep(mockStep, mockScenario, mockTestResult);
+            const testResultContainer = service.testResultContainer;
+            expect(testResultContainer.testNames).toHaveLength(1);
+            expect(testResultContainer.testNames[0]).toEqual("Test scenario");
+            expect(testResultContainer.testResults["Test scenario"]).toEqual([expectedResult]);
         });
     });
 
