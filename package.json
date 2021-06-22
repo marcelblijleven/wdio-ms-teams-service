@@ -7,10 +7,12 @@
         "test": "tests"
     },
     "dependencies": {
-        "@wdio/reporter": "^7.6.0",
-        "@wdio/types": "^7.6.0",
+        "@cucumber/cucumber": "^7.3.0",
+        "@cucumber/messages": "^16.0.1",
+        "@wdio/reporter": "^7.7.3",
+        "@wdio/types": "^7.7.3",
         "axios": "^0.21.1",
-        "webdriverio": "^7.6.0"
+        "webdriverio": "^7.7.4"
     },
     "devDependencies": {
         "@babel/core": "^7.14.3",
