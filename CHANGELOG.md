@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.8](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.7...v0.1.8) (2021-07-02)
+
+
+### Features
+
+* add cucumber afterStep ([60ff14c](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/60ff14ce16085ffa6919b03894e80ba91a72d761))
+
 ### [0.1.7](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.6...v0.1.7) (2021-05-25)
 
 
