@@ -4,10 +4,12 @@ import { MsTeamsServiceError } from "./errors";
 
 export default class IncomingWebhook {
     private readonly _url: string;
+    private readonly _timeout: number;
     private _axios!: AxiosInstance;
 
-    constructor(url: string) {
+    constructor(url: string, timeout?: number) {
         this._url = url;
+        this._timeout = timeout || 10000;
 
         if (!this._url) {
             throw new MsTeamsServiceError("no webhook URL provided");

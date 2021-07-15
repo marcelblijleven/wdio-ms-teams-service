@@ -14,6 +14,7 @@ interface MsTeamsServiceOptions extends Services.ServiceOption {
     webhookURL: string;
     failingTestsOnly?: boolean;
     message?: string;
+    timeout?: number;
 }
 
 export default class MsTeamsService implements Services.ServiceInstance {
@@ -26,7 +27,7 @@ export default class MsTeamsService implements Services.ServiceInstance {
     private readonly _message?: string;
 
     constructor(serviceOptions: MsTeamsServiceOptions, capabilities: Capabilities, config: TestRunnerOptions) {
-        this._webhook = new IncomingWebhook(serviceOptions.webhookURL);
+        this._webhook = new IncomingWebhook(serviceOptions.webhookURL, serviceOptions.timeout);
         this._capabilities = capabilities;
         this._config = config;
         this.testResultContainer = new TestResultContainer();

@@ -58,6 +58,16 @@ Default: `An automated test run just completed`
 
 Required: `false`
 
+### timeout
+
+Provide a timeout for the webhook request.
+
+Type `number`
+
+Default: `10000`
+
+Required: `false`
+
 ## Author
 
 Marcel Blijleven <marcelblijleven@gmail.com>
