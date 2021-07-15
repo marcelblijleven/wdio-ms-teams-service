@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.1.9](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.8...v0.1.9) (2021-07-15)
+
+
+### Features
+
+* add timeout to service options ([32a6a21](https://github.com/marcelblijleven/wdio-ms-teams-service/commit/32a6a213fe1ff6d223eb8b2e21ed47aa562c6697))
+
 ### [0.1.8](https://github.com/marcelblijleven/wdio-ms-teams-service/compare/v0.1.7...v0.1.8) (2021-07-02)
 
 
